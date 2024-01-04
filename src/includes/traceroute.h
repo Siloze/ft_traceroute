@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../../Lib/src/includes.h"
+#include "structs.h"
 
-#include <stdint.h>
-#include <stdio.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -14,54 +13,39 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <ctype.h>
-#include <signal.h>
 #include <math.h>
+#include <string.h>
 
-#define MAX_TIME 2000
-#define MAX_PROBES 3
-struct ip_header{
-	uint8_t version:4;
-	uint8_t ihl:4;
-	uint8_t service;
-	uint16_t len;
-	uint16_t id;
-	uint16_t flags:3;
-	uint16_t frag_offset:13;
-	uint8_t ttl;
-	uint8_t protocol;
-	uint16_t checksum;
-	uint32_t src_ip;
-	uint32_t dst_ip;
-};
+void traceroute(struct traceroute_args args);
 
-struct icmp_header {
-    uint8_t type;
-    uint8_t code;
-    uint16_t checksum;
-    uint16_t id;
-    uint16_t seq;
+ssize_t     sendUdpPacket(int sockfd, struct sockaddr *ai_addr, size_t packet_size);
+ssize_t     sendIcmpPacket(int sockfd, struct sockaddr_in *addr, struct icmp_header *packet);
 
-};
+struct ip_header    extractIpHeader(char *buf);
+struct icmp_header  extractIcmpHeader(char *buf);
 
-struct response {
-    size_t				time;
-	char				*raw;
-	struct ip_header	ip_header;
-	struct icmp_header	icmp_header;
-};
 
-void traceroute(char *host);
+char            *ipv4ToString(uint32_t ip);
+struct addrinfo getHostAddress(char *ip);
+uint16_t        checksum(void *data, size_t len);
 
-struct icmp_header initIcmpHeader(uint8_t type, uint8_t code);
-ssize_t sendIcmpPacket(int sockfd, struct sockaddr_in *addr, struct icmp_header *packet);
-struct icmp_header extractIcmpHeader(char *buf);
 
-struct ip_header extractIpHeader(char *buf);
-char *ipv4ToString(uint32_t ip);
+void    showHeader(int ttl);
+void    showError(struct response *res);
+void    showResponseTime(struct response *res);
+void    showNoResponse(size_t retry, struct traceroute_args args);
+void    showInit(struct traceroute_args args, struct addrinfo addr);
+void    showResponse(struct response res, size_t retry, struct traceroute_args args);
 
-void startClock();
-size_t stopClock();
-void resetClock();
-size_t getClock();
+int     portUnreachable(struct response *res);
+int     timeoutReached(struct response *res);
+short   isEmpty(struct response *res, size_t size);
 
-size_t getInterval();
+void    setNewTTL(int sock, int ttl);
+void    setPort(struct addrinfo *addr, int port);
+
+void    startClock();
+void    resetClock();
+size_t  getClock();
+size_t  stopClock();
+size_t  getInterval();

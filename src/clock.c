@@ -4,8 +4,8 @@ size_t getInterval(){
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-    size_t milliseconds = tv.tv_sec*1000LL + tv.tv_usec/1000;
-	return milliseconds;
+    long mili = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
+	return mili;
 }
 
 size_t * getRawClock(){
