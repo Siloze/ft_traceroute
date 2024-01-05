@@ -52,8 +52,6 @@ void startLoop(int udp_sock, int icmp_sock, struct addrinfo *addr, struct tracer
 	int					retry = args.max_retries;
 	struct	response	*res;
 
-	// setId(udp_sock, getpid());
-
 	while (ttl < args.max_hops){
 
 		if (retry == 3)
@@ -86,6 +84,9 @@ void startLoop(int udp_sock, int icmp_sock, struct addrinfo *addr, struct tracer
 			nextGateway(&ttl, &retry, &lastIp, args);
 
 	}
+	write(1, "\n", 1);
+	if (res)
+		free(res);
 }
 
 void traceroute(struct traceroute_args args){

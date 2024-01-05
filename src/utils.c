@@ -46,3 +46,13 @@ short isEmpty(struct response *res, size_t size){
 	return 1;
 }
 
+
+short isNumber(char *str){
+    for (size_t i = 0; str[i]; i++)
+    {
+        if (!isdigit(str[i]))
+            return 0;
+    }
+    return 1;
+}
+

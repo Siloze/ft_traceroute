@@ -23,7 +23,7 @@ void showResponse(struct response res, size_t retry, struct traceroute_args args
     if (retry < args.max_retries){
         write(1, "  ", 2);
     }
-	write(1, ipv4ToString(res.ip_header.src_ip), 16);
+	write(1, ipv4ToString(res.ip_header.src_ip), ft_strlen(ipv4ToString(res.ip_header.src_ip), 0));
 	write(1, "  ", 2);
 	showResponseTime(&res);
 }

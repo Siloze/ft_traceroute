@@ -40,6 +40,7 @@ void    showResponse(struct response res, size_t retry, struct traceroute_args a
 int     portUnreachable(struct response *res);
 int     timeoutReached(struct response *res);
 short   isEmpty(struct response *res, size_t size);
+short   isNumber(char *str);
 
 void    setNewTTL(int sock, int ttl);
 void    setPort(struct addrinfo *addr, int port);

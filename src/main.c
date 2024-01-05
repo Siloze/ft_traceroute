@@ -1,15 +1,5 @@
 #include "includes/traceroute.h"
 
-short isNumber(char *str){
-    for (size_t i = 0; str[i]; i++)
-    {
-        if (!isdigit(str[i]))
-            return 0;
-    }
-    return 1;
-}
-
-
 int main(int ac, char **argv){
 
     if (ac < 2)
