@@ -35,8 +35,9 @@ int timeoutReached(struct response *res){
 }
 
 short isEmpty(struct response *res, size_t size){
-    if (!res)
+    if (!res){
         return 1;
+	}		
 	for (size_t i = 0; i < size; i++)
 	{
 		if (res[i].raw)
